@@ -6,8 +6,7 @@ This repo demonstrates **GitHub Actions matrix builds** with:
 - Unique artifacts per job
 - Step named `matrix-140de31`
 
-**Email:** your-email@iitm.ac.in  
-*(Replace with your actual IITM email)*
+ **Email:** 24f2004489@ds.study.iitm.ac.in  
 
 ## Workflow
 - `.github/workflows/build.yml`
