@@ -1,0 +1,57 @@
+name: Matrix Build Demo
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        node: [16, 18, 20]
+        # Ensures at least 3 jobs
+        include:
+          - os: ubuntu-latest
+            node: 16
+          - os: macos-latest
+            node: 18
+          - os: windows-latest
+            node: 20
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: matrix-140de31
+        run: |
+          echo "Running matrix job"
+          echo "OS: ${{ matrix.os }}"
+          echo "Node: ${{ matrix.node }}"
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+
+      - name: Generate build artifact
+        run: |
+          echo "=== Build Log for ${{ matrix.os }} / Node ${{ matrix.node }} ===" > build.log
+          echo "Timestamp: $(date)" >> build.log
+          echo "Runner: ${{ runner.os }}" >> build.log
+          node -v >> build.log
+          npm -v >> build.log
+          echo "Sample build step completed." >> build.log
+        shell: bash
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-140de31-${{ matrix.os }}-node${{ matrix.node }}
+          path: build.log
+          retention-days: 1
